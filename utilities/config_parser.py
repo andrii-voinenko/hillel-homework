@@ -1,7 +1,8 @@
 import configparser
+# from hillel-homework.CONSTANTS import ROOT_DIR
 
 config = configparser.RawConfigParser()
-config.read("../configurations/configuration.ini")
+# config.read(f"{ROOT_DIR}/configuration.ini")
 
 
 class ReadConfig:
