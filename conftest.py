@@ -10,7 +10,7 @@ from page_objects.login_page import LoginPage
 def create_driver():
     chrome_driver = Chrome(service=Service(ChromeDriverManager().install()))
     chrome_driver.maximize_window()
-    chrome_driver.get("https://www.saucedemo.com")
+    chrome_driver.get(ReadConfig().get_base_url())
     yield chrome_driver
     chrome_driver.quit()
 
