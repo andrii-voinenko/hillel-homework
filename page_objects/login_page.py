@@ -1,42 +1,47 @@
 from time import sleep
 from selenium.webdriver.common.by import By
 
+from utilities.web_ui.base_page import BasePage
 
-class LoginPage:
+
+class LoginPage(BasePage):
     def __init__(self, driver):
-        self.__driver = driver
+        super().__init__(driver)
 
-    _email_locator = '//input[@id="user-name"]'
-    _password_locator = '//input[@id="password"]'
-    _login_button_locator = '//input[@id="login-button"]'
-    _menu_locator = '//button[@id="react-burger-menu-btn"]'
-    _error_locator = '//div//h3[@data-test="error"]'
+    _email = (By.XPATH, '//input[@id="user-name"]')
+    _password = (By.XPATH, '//input[@id="password"]')
+    _login_button = (By.XPATH, '//input[@id="login-button"]')
+    _burger_menu = (By.XPATH, '//button[@id="react-burger-menu-btn"]')
+    _error = (By.XPATH, '//div//h3[@data-test="error"]')
+    _error_button = (By.XPATH, '//button[@class="error-button"]')
 
-    def __find_element(self, locator: str):
-        web_element = self.__driver.find_element(By.XPATH, locator)
-        return web_element
+    _error_text = "Epic sadface: Sorry, this user has been locked out."
 
     def set_email(self, email_value: str):
-        email_element = self.__find_element(self._email_locator)
-        email_element.clear()
-        email_element.send_keys(email_value)
+        self.send_keys(self._email, email_value)
         return self
 
     def set_password(self, password_value: str):
-        password_element = self.__find_element(self._password_locator)
-        password_element.clear()
-        password_element.send_keys(password_value)
-        sleep(3)
+        self.send_keys(self._password, password_value)
         return self
 
-    def log_in_click(self):
-        login_button_element = self.__find_element(self._login_button_locator)
-        login_button_element.click()
+    def click_log_in(self):
+        return self.click(self._login_button)
+
+    def click_error_button(self):
+        return self.click(self._error_button)
 
     def menu_is_displayed(self):
-        menu_element = self.__find_element(self._menu_locator)
-        return menu_element.is_displayed()
+        return self.wait_until_element_displayed(self._burger_menu)
 
-    def error_message(self):
-        error_element = self.__find_element(self._error_locator)
-        return error_element.is_displayed()
+    def error_text(self):
+        if self.get_element_text(self._error) == self._error_text:
+            return True
+        else:
+            return False
+
+    def no_error_notification(self):
+        if self.element_invisible(self._error):
+            return True
+        else:
+            return False
