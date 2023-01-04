@@ -17,7 +17,7 @@ def parse():
     return Configuration(**parse_dict)
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture()
 def create_driver(parse):
     driver = DriverFactory.create_driver(parse.browser_id)
     driver.maximize_window()
@@ -39,7 +39,7 @@ def logg_in(open_login_page, create_driver, parse):
 
 
 @pytest.fixture()
-def open_footer(open_login_page, create_driver):
+def open_footer(open_login_page, create_driver, parse):
     login_page = open_login_page
     login_page.set_email(parse.user_name).set_password(parse.password).click_log_in()
     return Footer(create_driver)
